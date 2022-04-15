@@ -58,7 +58,15 @@ function noticias_init(){
             'id' => 'news_id',
         ),$atts);
 
-        $out ='<div id="'.$params['id'].'">';
+        $out = '<div id="'.$params['id'].'" class="flex flex-wrap mt-20 mb-5">';
+            $out .='<div class="md:basis-4/12 px-1 pb-4">';
+                $out .='<div class="mx-11 sm:ml-20 md:ml-22 lg:ml-36 sm:mr-0">
+                    <div class="text-primary text-3xl font-bold mb-2">Noticias</div>
+                    <div class="text-secondary text-base">Conozca el quehacer y la actualidad de Aguas de La Habana</div>
+                    <a href="/noticias" target="_blank"><div class="max-w-fit mt-4 px-2 py-1 rounded-md bg-gray-50 cursor-pointer dark:bg-transparent ring-1 ring-gray-700 hover:bg-secondary hover:text-white">Más Noticias</div></a>
+                </div>';
+            $out .='</div>';
+            $out .='<div class="md:basis-8/12 grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1- gap-5 px-11 md:pl-0">';
 
         $args = [
             'posts_per_page' => 6,
@@ -72,19 +80,24 @@ function noticias_init(){
         while($news->have_posts()):$news->the_post();
             $title = get_the_title();
             $url = get_the_permalink();
+            $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+            $date = get_the_date( 'd').' de '.
+                $meses[get_the_date(get_the_date('n')-1)].
+                get_the_date( ', Y');
             $img_url = get_the_post_thumbnail_url();
             $subtitle = get_the_content();
             
-            $out .='<div><a href="'.$url.'">';
-            $out .='<img src="'.$img_url.'" alt="'.$title.' image">';
-            $out .='<div>'.$title.'</div>';
-            $out .='<div>'.$subtitle.'</div>';
+            $out .='<div class="border-0 rounded-md shadow-custom bg-white"><a href="'.$url.'">';
+            $out .='<div class="py-2 px-4 text-secondary text-sm">'.$date.'</div>';
+            $out .='<img src="'.$img_url.'" alt="'.$title.' image" class="text-center text-sm text-secondary/50">';
+            $out .='<div class="p-4 pb-11"><div class="text-primary text-md font-bold pb-4">'.$title.'</div>';
+            $out .='<div class="text-secondary text-sm text-ellipsis overflow-hidden">'.$subtitle.'</div></div>';
             $out .='</a></div>';
 
         endwhile;
         wp_reset_query();
 
-        $out.= '</div>';
+        $out.= '</div></div>';
 
         return $out;
     }add_shortcode( 'show_news', 'show_news_grid' ); 
