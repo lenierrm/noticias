@@ -89,4 +89,12 @@ function noticias_init(){
     }add_shortcode( 'show_news', 'show_news_grid' ); 
 
 
+
 }
+
+
+function noticias_enqueue_scripts(){
+    wp_register_style( 'custom_style', plugins_url('/inc/style.min.css', __FILE__), false, '1.0.0', 'all');
+    wp_enqueue_style( 'custom_style' );
+}add_action( 'wp_enqueue_scripts', 'noticias_enqueue_scripts' );
+
