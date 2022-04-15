@@ -59,7 +59,31 @@ function noticias_init(){
         ),$atts);
 
         $out ='<div id="'.$params['id'].'">';
-        $out ='News';
+
+        $args = [
+            'posts_per_page' => 6,
+            'post_type'      => 'noticias',
+            'fields'         => 'ids',
+            'orderby'           => 'date',
+            'order'             => 'ASC'
+        ];
+
+        $news = new WP_Query($args);
+        while($news->have_posts()):$news->the_post();
+            $title = get_the_title();
+            $url = get_the_permalink();
+            $img_url = get_the_post_thumbnail_url();
+            $subtitle = get_the_content();
+            
+            $out .='<div><a href="'.$url.'">';
+            $out .='<img src="'.$img_url.'" alt="'.$title.' image">';
+            $out .='<div>'.$title.'</div>';
+            $out .='<div>'.$subtitle.'</div>';
+            $out .='</a></div>';
+
+        endwhile;
+        wp_reset_query();
+
         $out.= '</div>';
         return $out;
     }add_shortcode( 'show_news', 'show_news_grid' ); 
